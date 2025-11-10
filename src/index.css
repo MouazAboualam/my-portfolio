@@ -3,9 +3,3 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Your existing CSS below */
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-}
