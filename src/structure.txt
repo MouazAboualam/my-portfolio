@@ -1,0 +1,30 @@
+src/
+├── components/
+│   ├── layout/
+│   │   ├── Footer.jsx
+│   │   ├── Navigation.jsx
+│   │   └── [Other layout components if needed in the future]
+│   ├── sections/
+│   │   ├── AboutSection.jsx
+│   │   ├── ContactSection.jsx
+│   │   ├── WelcomeSection.jsx  (Uses the original complex structure from App.js)
+│   │   ├── ServicesSection.jsx
+│   │   ├── SiteShowcaseSection.jsx
+│   │   ├── ThemesSection.jsx
+│   │   ├── WorksSection.jsx
+│   │   └── [Other section components if needed in the future]
+│   ├── ui/
+│   │   ├── MobileMockup.jsx
+│   │   ├── ThemeMockup.jsx
+│   │   └── [Other reusable UI elements]
+│   └── [Other component categories if needed]
+├── data/
+│   ├── projects.js
+│   ├── services.js
+│   ├── siteShowcases.js
+│   ├── themes.js
+│   ├── milestones.js
+│   └── [Other data files]
+├── App.jsx
+├── index.js
+└── [other standard React project files like package.json, public/, etc.]
