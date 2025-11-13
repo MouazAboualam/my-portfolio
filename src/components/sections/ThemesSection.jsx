@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   ShoppingBag,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Layout,
   CreditCard,
   Code,
@@ -11,6 +13,11 @@ import ThemeMockup from "../ui/ThemeMockup";
 
 const ThemesSection = ({ themes }) => {
   const [activeTheme, setActiveTheme] = useState("all");
+  const [expandedFeatures, setExpandedFeatures] = useState({});
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [startScrollLeft, setStartScrollLeft] = useState(0);
+  const scrollContainerRef = useRef(null);
 
   // Filter themes based on active filter
   const filteredThemes =
@@ -44,6 +51,74 @@ const ThemesSection = ({ themes }) => {
             );
           return false;
         });
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const filterOptions = [
+    { id: "all", name: "All Themes", colors: "from-pink-500 to-purple-600" },
+    { id: "pink", name: "Pink Themes", colors: "from-pink-500 to-rose-600" },
+    {
+      id: "orange",
+      name: "Orange Themes",
+      colors: "from-orange-500 to-amber-600",
+    },
+    {
+      id: "green",
+      name: "Green Themes",
+      colors: "from-emerald-500 to-teal-600",
+    },
+    {
+      id: "purple",
+      name: "Purple Themes",
+      colors: "from-violet-500 to-purple-600",
+    },
+    { id: "blue", name: "Blue Themes", colors: "from-blue-500 to-cyan-600" },
+    { id: "black", name: "Dark Themes", colors: "from-slate-800 to-slate-900" },
+    { id: "gray", name: "Gray Themes", colors: "from-gray-500 to-slate-600" },
+  ];
+
+  const toggleFeature = (index) => {
+    setExpandedFeatures((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
+  // Handle mouse events for horizontal scrolling
+  const handleMouseDown = (e) => {
+    if (window.innerWidth < 768) return; // Only enable on desktop
+
+    setIsDragging(true);
+    setStartX(
+      e.pageX - scrollContainerRef.current.getBoundingClientRect().left
+    );
+    setStartScrollLeft(scrollContainerRef.current.scrollLeft);
+    e.preventDefault();
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+
+    const x = e.pageX - scrollContainerRef.current.getBoundingClientRect().left;
+    const walk = (x - startX) * 2; // Multiply by 2 for faster scrolling
+    scrollContainerRef.current.scrollLeft = startScrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Add event listeners for mouse events
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+      };
+    }
+  }, [isDragging, startX, startScrollLeft]);
 
   return (
     <section
@@ -81,50 +156,58 @@ const ThemesSection = ({ themes }) => {
             project. All themes include complete source code and documentation.
           </motion.p>
         </div>
-        {/* Theme Filter Tabs */}
-        <div className="flex flex-wrap justify-center gap-3 mb-10">
-          {[
-            {
-              id: "all",
-              name: "All Themes",
-              colors: "from-pink-500 to-purple-600",
-            },
-            {
-              id: "pink",
-              name: "Pink Themes",
-              colors: "from-pink-500 to-rose-600",
-            },
-            {
-              id: "orange",
-              name: "Orange Themes",
-              colors: "from-orange-500 to-amber-600",
-            },
-            {
-              id: "green",
-              name: "Green Themes",
-              colors: "from-emerald-500 to-teal-600",
-            },
-            {
-              id: "purple",
-              name: "Purple Themes",
-              colors: "from-violet-500 to-purple-600",
-            },
-            {
-              id: "blue",
-              name: "Blue Themes",
-              colors: "from-blue-500 to-cyan-600",
-            },
-            {
-              id: "black",
-              name: "Dark Themes",
-              colors: "from-slate-800 to-slate-900",
-            },
-            {
-              id: "gray",
-              name: "Gray Themes",
-              colors: "from-gray-500 to-slate-600",
-            },
-          ].map((filter) => (
+
+        {/* Mobile Filter Dropdown */}
+        <div className="md:hidden mb-10">
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full flex items-center justify-between px-5 py-3 bg-white rounded-xl font-medium text-slate-700 border border-slate-200 hover:bg-slate-50 transition-all duration-300"
+            >
+              <span>
+                {
+                  filterOptions.find((option) => option.id === activeTheme)
+                    ?.name
+                }
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-300 ${
+                  isDropdownOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {isDropdownOpen && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-slate-200 z-20 overflow-hidden">
+                {filterOptions.map((filter) => (
+                  <button
+                    key={filter.id}
+                    onClick={() => {
+                      setActiveTheme(filter.id);
+                      setIsDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-5 py-3 flex items-center transition-colors duration-200 ${
+                      activeTheme === filter.id
+                        ? `bg-gradient-to-r ${filter.colors} text-white`
+                        : "text-slate-700 hover:bg-slate-50"
+                    }`}
+                  >
+                    <div
+                      className={`w-4 h-4 rounded-full mr-3 ${
+                        activeTheme === filter.id ? "bg-white" : filter.colors
+                      }`}
+                    ></div>
+                    <span className="text-sm">{filter.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Desktop Filter Tabs - Hidden on mobile */}
+        <div className="hidden md:flex flex-wrap justify-center gap-3 mb-10">
+          {filterOptions.map((filter) => (
             <motion.button
               key={filter.id}
               whileHover={{ y: -2 }}
@@ -142,13 +225,27 @@ const ThemesSection = ({ themes }) => {
             </motion.button>
           ))}
         </div>
+
         {/* Horizontal scrolling theme showcase */}
         <div className="relative mb-12">
           {/* Gradient overlays for scroll indication */}
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
-          {/* Scrollable container */}
-          <div className="flex overflow-x-auto scrollbar-hide py-6 gap-6">
+
+          {/* Scrollable container with drag functionality */}
+          <div
+            ref={scrollContainerRef}
+            className="flex overflow-x-auto scrollbar-hide py-6 gap-6 cursor-grab"
+            onMouseDown={handleMouseDown}
+            style={{
+              cursor: isDragging
+                ? "grabbing"
+                : window.innerWidth >= 768
+                ? "grab"
+                : "default",
+              userSelect: "none", // Prevent text selection during drag
+            }}
+          >
             {filteredThemes.map((theme, index) => (
               <motion.div
                 key={theme.id}
@@ -164,8 +261,77 @@ const ThemesSection = ({ themes }) => {
             ))}
           </div>
         </div>
-        {/* Theme Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+
+        {/* Mobile: Expandable Feature Cards */}
+        <div className="md:hidden mb-16">
+          <h3 className="text-xl font-bold mb-4">Theme Features</h3>
+          <div className="space-y-4">
+            {[
+              {
+                icon: <Layout className="w-8 h-8 text-pink-500" />,
+                title: "Responsive Design",
+                description:
+                  "All themes are fully responsive and look great on all device sizes.",
+              },
+              {
+                icon: <CreditCard className="w-8 h-8 text-amber-500" />,
+                title: "One-Time Payment",
+                description:
+                  "Pay once for lifetime access to the theme and all future updates.",
+              },
+              {
+                icon: <Code className="w-8 h-8 text-emerald-500" />,
+                title: "Complete Source Code",
+                description:
+                  "Get full access to clean, well-documented code with no restrictions.",
+              },
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white p-4 rounded-xl shadow-md border border-slate-100"
+              >
+                <div
+                  className="flex items-start justify-between cursor-pointer"
+                  onClick={() => toggleFeature(index)}
+                >
+                  <div className="flex items-start">
+                    <div className="mr-3 mt-1">{feature.icon}</div>
+                    <div>
+                      <h3 className="font-bold">{feature.title}</h3>
+                    </div>
+                  </div>
+                  <div className="ml-3 mt-1">
+                    <ChevronDown
+                      className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${
+                        expandedFeatures[index] ? "rotate-180" : ""
+                      }`}
+                    />
+                  </div>
+                </div>
+                {expandedFeatures[index] && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="mt-3 pt-3 border-t border-slate-100"
+                  >
+                    <p className="text-slate-600 text-sm">
+                      {feature.description}
+                    </p>
+                  </motion.div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop: Grid Layout */}
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {[
             {
               icon: <Layout className="w-8 h-8 text-pink-500" />,
@@ -200,6 +366,7 @@ const ThemesSection = ({ themes }) => {
             </motion.div>
           ))}
         </div>
+
         {/* CTA Section */}
         <div className="text-center max-w-4xl mx-auto bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-8 shadow-lg border border-pink-100">
           <motion.div

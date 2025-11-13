@@ -91,12 +91,6 @@ const App = () => {
       {/* Themes Marketplace Section */}
       <ThemesSection themes={themes} />
 
-      {/* Site Showcase Stream Section */}
-      <SiteShowcaseSection
-        siteShowcases={siteShowcases}
-        scrollToSection={scrollToSection}
-      />
-
       {/* About Section - Simplified since we have detailed intro in WelcomeSection */}
       <AboutSection />
 

@@ -19,6 +19,170 @@ import {
 
 const WelcomeSection = ({ scrollToSection }) => {
   const [expandedSection, setExpandedSection] = useState(null);
+  const [typedCode, setTypedCode] = useState("");
+  const [showCursor, setShowCursor] = useState(true);
+
+  const codeToType = `<DeveloperProfile>
+  <Name>Mouaz Abou Alam</Name>
+  <Specialization>
+    <Backend level="expert" />
+    <Security level="advanced" />
+  </Specialization>
+  <Approach>milestone-based</Approach>
+</DeveloperProfile>`;
+
+  useEffect(() => {
+    let timeoutId;
+    let charIndex = 0;
+
+    const typeCode = () => {
+      if (charIndex <= codeToType.length) {
+        setTypedCode(codeToType.substring(0, charIndex));
+
+        // Toggle cursor visibility periodically during typing
+        if (charIndex % 30 === 0) {
+          setShowCursor((prev) => !prev);
+        }
+
+        if (charIndex < codeToType.length) {
+          timeoutId = setTimeout(typeCode, 10); // Continue typing
+        } else {
+          setShowCursor(false); // Hide cursor when typing is complete
+        }
+
+        charIndex++;
+      }
+    };
+
+    // Start typing after a small delay to allow other animations to start
+    timeoutId = setTimeout(() => typeCode(), 500);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  const highlightSyntax = (code) => {
+    // Split code into tokens and apply syntax highlighting
+    const tokens = [];
+    let current = "";
+    let inTag = false;
+    let inAttributeName = false;
+    let inAttributeValue = false;
+
+    for (let i = 0; i < code.length; i++) {
+      const char = code[i];
+      const nextChar = code[i + 1] || "";
+
+      if (char === "<" && !inAttributeValue) {
+        if (current) {
+          tokens.push({ content: current, type: "text" });
+          current = "";
+        }
+        inTag = true;
+        current += char;
+      } else if (char === ">" && inTag) {
+        current += char;
+        tokens.push({ content: current, type: "tag" });
+        current = "";
+        inTag = false;
+        inAttributeName = false;
+        inAttributeValue = false;
+      } else if (char === "=" && inTag && !inAttributeValue) {
+        if (current) {
+          tokens.push({ content: current, type: "attr-name" });
+          current = "";
+        }
+        current += char;
+        tokens.push({ content: current, type: "operator" });
+        current = "";
+        inAttributeName = false;
+      } else if ((char === '"' || char === "'") && inTag) {
+        if (!inAttributeValue) {
+          if (current) {
+            tokens.push({ content: current, type: "attr-name" });
+            current = "";
+          }
+          inAttributeValue = true;
+          current += char;
+        } else if (
+          (char === '"' && current[0] === '"') ||
+          (char === "'" && current[0] === "'")
+        ) {
+          current += char;
+          tokens.push({ content: current, type: "attr-value" });
+          current = "";
+          inAttributeValue = false;
+        } else {
+          current += char;
+        }
+      } else if (
+        /\s/.test(char) &&
+        inTag &&
+        !inAttributeValue &&
+        current &&
+        !inAttributeName
+      ) {
+        if (current) {
+          tokens.push({ content: current, type: "tag-name" });
+          current = "";
+        }
+        current += char;
+        inAttributeName = true;
+      } else {
+        current += char;
+      }
+    }
+
+    if (current) {
+      if (inTag) {
+        if (inAttributeValue) {
+          tokens.push({ content: current, type: "attr-value" });
+        } else if (inAttributeName) {
+          tokens.push({ content: current, type: "attr-name" });
+        } else {
+          tokens.push({ content: current, type: "tag-name" });
+        }
+      } else {
+        tokens.push({ content: current, type: "text" });
+      }
+    }
+
+    return tokens;
+  };
+
+  const renderHighlightedCode = () => {
+    const tokens = highlightSyntax(typedCode);
+    return tokens.map((token, index) => {
+      let className = "";
+      switch (token.type) {
+        case "tag":
+          className = "text-blue-300";
+          break;
+        case "tag-name":
+          className = "text-blue-300";
+          break;
+        case "attr-name":
+          className = "text-amber-300";
+          break;
+        case "attr-value":
+          className = "text-green-300";
+          break;
+        case "operator":
+          className = "text-blue-300";
+          break;
+        case "text":
+          className = "text-green-400";
+          break;
+        default:
+          className = "text-green-400";
+      }
+
+      return (
+        <span key={index} className={className}>
+          {token.content}
+        </span>
+      );
+    });
+  };
 
   const toggleSection = (section) => {
     setExpandedSection(expandedSection === section ? null : section);
@@ -42,7 +206,20 @@ const WelcomeSection = ({ scrollToSection }) => {
                   <div className="relative bg-gradient-to-br from-blue-600 to-cyan-600 p-1 rounded-full">
                     <div className="bg-white rounded-full p-1">
                       <div className="w-32 h-32 bg-slate-200 rounded-full flex items-center justify-center overflow-hidden border-4 border-white shadow-lg sm:w-48 sm:h-48">
-                        <User className="w-16 h-16 text-blue-500 sm:w-24 sm:h-24" />
+                        <img
+                          src="/images/profile.png"
+                          alt="Mouaz Abou Alam"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // Fallback to User icon if image fails to load
+                            e.target.style.display = "none";
+                            e.target.nextSibling.style.display = "flex";
+                          }}
+                        />
+                        <User
+                          className="w-16 h-16 text-blue-500 sm:w-24 sm:h-24"
+                          style={{ display: "none" }}
+                        />
                       </div>
                     </div>
                   </div>
@@ -231,7 +408,20 @@ const WelcomeSection = ({ scrollToSection }) => {
                     <div className="relative bg-gradient-to-br from-blue-600 to-cyan-600 p-1 rounded-full">
                       <div className="bg-white rounded-full p-1">
                         <div className="w-48 h-48 bg-slate-200 rounded-full flex items-center justify-center overflow-hidden border-4 border-white shadow-lg">
-                          <User className="w-24 h-24 text-blue-500" />
+                          <img
+                            src="/images/profile.png"
+                            alt="Mouaz Abou Alam"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              // Fallback to User icon if image fails to load
+                              e.target.style.display = "none";
+                              e.target.nextSibling.style.display = "flex";
+                            }}
+                          />
+                          <User
+                            className="w-24 h-24 text-blue-500"
+                            style={{ display: "none" }}
+                          />
                         </div>
                       </div>
                     </div>
@@ -337,65 +527,15 @@ const WelcomeSection = ({ scrollToSection }) => {
                         <AwardIcon className="w-6 h-6 text-amber-500" />
                       </div>
 
-                      <div className="bg-slate-900 rounded-xl p-4 overflow-x-auto font-mono text-sm text-green-400">
-                        <div className="space-y-1">
-                          <div>
-                            {"<"}
-                            <span className="text-blue-300">
-                              DeveloperProfile
+                      <div className="bg-slate-900 rounded-xl p-4 overflow-x-auto font-mono text-sm">
+                        <pre className="whitespace-pre">
+                          {renderHighlightedCode()}
+                          {showCursor && (
+                            <span className="text-green-400 animate-pulse">
+                              |
                             </span>
-                            {">"}
-                          </div>
-                          <div>
-                            &nbsp;&nbsp;{"<"}
-                            <span className="text-blue-300">Name</span>
-                            {">"}Mouaz Abou Alam{"</"}
-                            <span className="text-blue-300">Name</span>
-                            {">"}
-                          </div>
-                          <div>
-                            &nbsp;&nbsp;{"<"}
-                            <span className="text-blue-300">
-                              Specialization
-                            </span>
-                            {">"}
-                          </div>
-                          <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;{"<"}
-                            <span className="text-blue-300">Backend</span>{" "}
-                            <span className="text-amber-300">level</span>=
-                            <span className="text-green-300">"expert"</span>{" "}
-                            {"/>"}
-                          </div>
-                          <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;{"<"}
-                            <span className="text-blue-300">Security</span>{" "}
-                            <span className="text-amber-300">level</span>=
-                            <span className="text-green-300">"advanced"</span>{" "}
-                            {"/>"}
-                          </div>
-                          <div>
-                            &nbsp;&nbsp;{"</"}
-                            <span className="text-blue-300">
-                              Specialization
-                            </span>
-                            {">"}
-                          </div>
-                          <div>
-                            &nbsp;&nbsp;{"<"}
-                            <span className="text-blue-300">Approach</span>
-                            {">"}milestone-based{"</"}
-                            <span className="text-blue-300">Approach</span>
-                            {">"}
-                          </div>
-                          <div>
-                            {"</"}
-                            <span className="text-blue-300">
-                              DeveloperProfile
-                            </span>
-                            {">"}
-                          </div>
-                        </div>
+                          )}
+                        </pre>
                       </div>
 
                       <div className="space-y-4">
