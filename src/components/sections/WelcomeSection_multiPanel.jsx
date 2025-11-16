@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   ShieldCheck,
@@ -14,19 +14,183 @@ import {
   Zap,
   ShieldCheck as ShieldCheckIcon,
   Award as AwardIcon,
+  ChevronDown as ChevronDownIcon,
 } from "lucide-react";
 
-const WelcomeSection = ({ scrollToSection }) => {
-  const [activePanel, setActivePanel] = useState(0);
+// Memoize the code highlighting function
+const highlightSyntax = (code) => {
+  const tokens = [];
+  let current = "";
+  let inTag = false;
+  let inAttributeName = false;
+  let inAttributeValue = false;
 
-  // Panel navigation function
-  const changePanel = (direction) => {
-    if (direction === "next" && activePanel < 1) {
-      setActivePanel(activePanel + 1);
-    } else if (direction === "prev" && activePanel > 0) {
-      setActivePanel(activePanel - 1);
+  for (let i = 0; i < code.length; i++) {
+    const char = code[i];
+    const nextChar = code[i + 1] || "";
+
+    if (char === "<" && !inAttributeValue) {
+      if (current) {
+        tokens.push({ content: current, type: "text" });
+        current = "";
+      }
+      inTag = true;
+      current += char;
+    } else if (char === ">" && inTag) {
+      current += char;
+      tokens.push({ content: current, type: "tag" });
+      current = "";
+      inTag = false;
+      inAttributeName = false;
+      inAttributeValue = false;
+    } else if (char === "=" && inTag && !inAttributeValue) {
+      if (current) {
+        tokens.push({ content: current, type: "attr-name" });
+        current = "";
+      }
+      current += char;
+      tokens.push({ content: current, type: "operator" });
+      current = "";
+      inAttributeName = false;
+    } else if ((char === '"' || char === "'") && inTag) {
+      if (!inAttributeValue) {
+        if (current) {
+          tokens.push({ content: current, type: "attr-name" });
+          current = "";
+        }
+        inAttributeValue = true;
+        current += char;
+      } else if (
+        (char === '"' && current[0] === '"') ||
+        (char === "'" && current[0] === "'")
+      ) {
+        current += char;
+        tokens.push({ content: current, type: "attr-value" });
+        current = "";
+        inAttributeValue = false;
+      } else {
+        current += char;
+      }
+    } else if (
+      /\s/.test(char) &&
+      inTag &&
+      !inAttributeValue &&
+      current &&
+      !inAttributeName
+    ) {
+      if (current) {
+        tokens.push({ content: current, type: "tag-name" });
+        current = "";
+      }
+      current += char;
+      inAttributeName = true;
+    } else {
+      current += char;
     }
+  }
+
+  if (current) {
+    if (inTag) {
+      if (inAttributeValue) {
+        tokens.push({ content: current, type: "attr-value" });
+      } else if (inAttributeName) {
+        tokens.push({ content: current, type: "attr-name" });
+      } else {
+        tokens.push({ content: current, type: "tag-name" });
+      }
+    } else {
+      tokens.push({ content: current, type: "text" });
+    }
+  }
+
+  return tokens;
+};
+
+const WelcomeSection = ({ scrollToSection }) => {
+  const [expandedSection, setExpandedSection] = useState(null);
+  const [typedCode, setTypedCode] = useState("");
+  const [showCursor, setShowCursor] = useState(true);
+
+  const codeToType = `<DeveloperProfile>
+  <Name>Mouaz Abou Alam</Name>
+  <Specialization>
+    <Backend level="expert" />
+    <Security level="advanced" />
+  </Specialization>
+  <Approach>milestone-based</Approach>
+</DeveloperProfile>`;
+
+  useEffect(() => {
+    let timeoutId;
+    let charIndex = 0;
+
+    const typeCode = () => {
+      if (charIndex <= codeToType.length) {
+        setTypedCode(codeToType.substring(0, charIndex));
+
+        if (charIndex % 30 === 0) {
+          setShowCursor((prev) => !prev);
+        }
+
+        if (charIndex < codeToType.length) {
+          timeoutId = setTimeout(typeCode, 10);
+        } else {
+          setShowCursor(false);
+        }
+
+        charIndex++;
+      }
+    };
+
+    timeoutId = setTimeout(() => typeCode(), 500);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  const renderHighlightedCode = useCallback(() => {
+    const tokens = highlightSyntax(typedCode);
+    return tokens.map((token, index) => {
+      let className = "";
+      switch (token.type) {
+        case "tag":
+          className = "text-blue-300";
+          break;
+        case "tag-name":
+          className = "text-blue-300";
+          break;
+        case "attr-name":
+          className = "text-amber-300";
+          break;
+        case "attr-value":
+          className = "text-green-300";
+          break;
+        case "operator":
+          className = "text-blue-300";
+          break;
+        case "text":
+          className = "text-green-400";
+          break;
+        default:
+          className = "text-green-400";
+      }
+
+      return (
+        <span key={index} className={className}>
+          {token.content}
+        </span>
+      );
+    });
+  }, [typedCode]);
+
+  const toggleSection = (section) => {
+    setExpandedSection(expandedSection === section ? null : section);
   };
+
+  // Preload images
+  useEffect(() => {
+    const img = new Image();
+    img.src = "/images/profile.png";
+  }, []);
 
   return (
     <section id="welcome" className="min-h-screen pt-20">

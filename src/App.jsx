@@ -1,32 +1,56 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 
-import projects from "./data/projects";
-import themes from "./data/themes";
-import siteShowcases from "./data/siteShowcases";
-import services from "./data/services";
-import Navigation from "./components/layout/Navigation";
-import Footer from "./components/layout/Footer";
-import ServicesSection from "./components/sections/ServicesSection";
-import AboutSection from "./components/sections/AboutSection";
-import ContactSection from "./components/sections/ContactSection";
-import ThemesSection from "./components/sections/ThemesSection";
-import SiteShowcaseSection from "./components/sections/SiteShowcaseSection";
-import WorksSection from "./components/sections/WorksSection";
-import WelcomeSection from "./components/sections/WelcomeSection";
+// Lazy load heavy components
+const Navigation = lazy(() => import("./components/layout/Navigation"));
+const Footer = lazy(() => import("./components/layout/Footer"));
+const ServicesSection = lazy(() =>
+  import("./components/sections/ServicesSection")
+);
+const AboutSection = lazy(() => import("./components/sections/AboutSection"));
+const ContactSection = lazy(() =>
+  import("./components/sections/ContactSection")
+);
+const ThemesSection = lazy(() => import("./components/sections/ThemesSection"));
+const SiteShowcaseSection = lazy(() =>
+  import("./components/sections/SiteShowcaseSection")
+);
+const WorksSection = lazy(() => import("./components/sections/WorksSection"));
+const WelcomeSection = lazy(() =>
+  import("./components/sections/WelcomeSection")
+);
+
+// Load data asynchronously
+const loadProjects = async () => import("./data/projects");
+const loadThemes = async () => import("./data/themes");
+const loadServices = async () => import("./data/services");
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("welcome"); // Updated initial state
+  const [activeSection, setActiveSection] = useState("welcome");
   const [activeMilestone, setActiveMilestone] = useState("all");
   const [hoveredProject, setHoveredProject] = useState(null);
   const [activeTheme, setActiveTheme] = useState("all");
   const [activePanel, setActivePanel] = useState(0);
+  const [data, setData] = useState({ projects: [], themes: [], services: [] });
+
+  useEffect(() => {
+    // Load data asynchronously
+    Promise.all([loadProjects(), loadThemes(), loadServices()]).then(
+      ([projects, themes, services]) => {
+        setData({
+          projects: projects.default,
+          themes: themes.default,
+          services: services.default,
+        });
+      }
+    );
+  }, []);
 
   // Scroll spy functionality
   useEffect(() => {
     const handleScroll = () => {
       const sections = document.querySelectorAll("section");
-      let currentSection = "welcome"; // Updated default
+      let currentSection = "welcome";
 
       sections.forEach((section) => {
         const sectionTop = section.offsetTop - 100;
@@ -42,7 +66,6 @@ const App = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Smooth scroll function
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -54,19 +77,18 @@ const App = () => {
     }
   };
 
-  // Filter projects by milestone
   const filteredProjects =
     activeMilestone === "all"
-      ? projects
-      : projects.filter((project) => project.milestone === activeMilestone);
+      ? data.projects
+      : data.projects.filter(
+          (project) => project.milestone === activeMilestone
+        );
 
-  // Filter themes by active filter
   const filteredThemes =
     activeTheme === "all"
-      ? themes
+      ? data.themes
       : themes.filter((theme) => theme.theme.includes(activeTheme));
 
-  // Panel navigation function
   const changePanel = (direction) => {
     if (direction === "next" && activePanel < 1) {
       setActivePanel(activePanel + 1);
@@ -75,36 +97,38 @@ const App = () => {
     }
   };
 
+  // Loading fallback component
+  const LoadingFallback = () => (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="mt-4 text-slate-600">Loading portfolio...</p>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 text-slate-900 font-sans">
-      {/* Navigation Bar */}
-      <Navigation
-        activeSection={activeSection}
-        scrollToSection={scrollToSection}
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-      />
+      <Suspense fallback={<LoadingFallback />}>
+        <Navigation
+          activeSection={activeSection}
+          scrollToSection={scrollToSection}
+          isMenuOpen={isMenuOpen}
+          setIsMenuOpen={setIsMenuOpen}
+        />
+        <WelcomeSection scrollToSection={scrollToSection} />
 
-      {/* WelcomeSection Section - Scrollable Panels */}
-      <WelcomeSection scrollToSection={scrollToSection} />
+        <ThemesSection themes={data.themes} />
 
-      {/* Themes Marketplace Section */}
-      <ThemesSection themes={themes} />
-
-      {/* About Section - Simplified since we have detailed intro in WelcomeSection */}
-      <AboutSection />
-
-      {/* Services Section */}
-      <ServicesSection services={services} />
-
-      {/* Works Section */}
-      <WorksSection projects={projects} scrollToSection={scrollToSection} />
-
-      {/* Contact Section */}
-      <ContactSection />
-
-      {/* Footer */}
-      <Footer />
+        <AboutSection />
+        <ServicesSection services={data.services} />
+        <WorksSection
+          projects={data.projects}
+          scrollToSection={scrollToSection}
+        />
+        <ContactSection />
+        <Footer />
+      </Suspense>
     </div>
   );
 };

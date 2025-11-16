@@ -15,7 +15,10 @@ import {
   List,
   ChevronUp,
 } from "lucide-react";
-import MobileMockup from "../ui/MobileMockup";
+import { lazy, Suspense } from "react";
+
+// Use lazy loading for the MobileMockup component
+const MobileMockup = lazy(() => import("../ui/MobileMockup"));
 
 const WorksSection = ({ projects, scrollToSection }) => {
   const [activeMilestone, setActiveMilestone] = useState("all");
@@ -141,11 +144,7 @@ const WorksSection = ({ projects, scrollToSection }) => {
             className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-1 mb-10 shadow-md"
           >
             <div className="bg-white rounded-xl overflow-hidden">
-              <div
-                className={`grid grid-cols-1 ${
-                  viewMode === "grid" ? "lg:grid-cols-2" : ""
-                }`}
-              >
+              <div className="grid grid-cols-1 lg:grid-cols-2">
                 {/* Left side - Project details */}
                 <div className="p-6 flex flex-col justify-center">
                   <div className="flex items-center space-x-2 mb-3">
@@ -163,7 +162,7 @@ const WorksSection = ({ projects, scrollToSection }) => {
                     authentication and real-time player interactions.
                   </p>
 
-                  <div className="grid grid-cols-1 ${viewMode === 'list' ? 'md:grid-cols-2' : 'md:grid-cols-2'} gap-3 mb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
                     <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
                       <div className="flex items-center text-blue-700 mb-1">
                         <Play className="w-4 h-4 mr-1" />
@@ -217,17 +216,24 @@ const WorksSection = ({ projects, scrollToSection }) => {
                   </div>
                 </div>
 
-                {/* Right side - Phone mockup */}
-                <div className="bg-slate-50 p-4 flex items-center justify-center">
-                  <div className="w-full max-w-xs">
-                    <MobileMockup project={mafiaGame} />
+                {/* Right side - Phone mockup - Centered and compact */}
+                <div className="flex items-center justify-center p-6 bg-slate-50">
+                  <div className="w-full max-w-xs flex justify-center">
+                    <Suspense
+                      fallback={
+                        <div className="w-72 h-[540px] bg-slate-200 rounded-[2.5rem] flex items-center justify-center text-slate-500">
+                          Loading...
+                        </div>
+                      }
+                    >
+                      <MobileMockup project={mafiaGame} />
+                    </Suspense>
                   </div>
                 </div>
               </div>
             </div>
           </motion.div>
         ) : null}
-
         {/* First Project Card - Always Visible (Non-Mafia) */}
         {firstProject && (
           <motion.div

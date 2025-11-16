@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Award,
@@ -18,8 +18,12 @@ import {
 
 const AboutSection = () => {
   const [currentPanel, setCurrentPanel] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isInView, setIsInView] = useState(false);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+  const autoSwipeTimeout = useRef(null);
+  const observer = useRef(null);
 
   const panels = [
     {
@@ -152,16 +156,62 @@ const AboutSection = () => {
     },
   ];
 
-  const nextPanel = () => {
-    setCurrentPanel((prev) => (prev + 1) % panels.length);
-  };
+  // Auto-swipe function - sets up the repeating timer
+  const startAutoSwipe = useCallback(() => {
+    if (isPaused || !isInView) return;
 
-  const prevPanel = () => {
-    setCurrentPanel((prev) => (prev - 1 + panels.length) % panels.length);
-  };
+    // Clear any existing timeout
+    if (autoSwipeTimeout.current) {
+      clearTimeout(autoSwipeTimeout.current);
+    }
 
+    // Set new timeout that advances to next panel
+    autoSwipeTimeout.current = setTimeout(() => {
+      setCurrentPanel((prev) => (prev + 1) % panels.length);
+      // Continue cycle if still in view
+      if (isInView && !isPaused) {
+        startAutoSwipe();
+      }
+    }, 5000);
+  }, [isPaused, isInView, panels.length]);
+
+  // Reset auto-swipe on user interaction or panel change
+  const resetAutoSwipe = useCallback(() => {
+    if (autoSwipeTimeout.current) {
+      clearTimeout(autoSwipeTimeout.current);
+    }
+
+    // Restart auto-swipe if in view and not paused
+    if (isInView && !isPaused) {
+      autoSwipeTimeout.current = setTimeout(() => {
+        setCurrentPanel((prev) => (prev + 1) % panels.length);
+        if (isInView && !isPaused) {
+          startAutoSwipe();
+        }
+      }, 5000);
+    }
+  }, [isInView, isPaused, startAutoSwipe, panels.length]);
+
+  // Handle user interaction pause
+  const handleUserInteraction = useCallback(() => {
+    setIsPaused(true);
+    if (autoSwipeTimeout.current) {
+      clearTimeout(autoSwipeTimeout.current);
+    }
+
+    // Resume after 10 seconds of inactivity if still in view
+    setTimeout(() => {
+      setIsPaused(false);
+      if (isInView) {
+        startAutoSwipe();
+      }
+    }, 10000);
+  }, [isInView, startAutoSwipe]);
+
+  // Swipe handlers
   const handleTouchStart = (e) => {
     touchStartX.current = e.targetTouches[0].clientX;
+    handleUserInteraction(); // Pause on touch start
   };
 
   const handleTouchMove = (e) => {
@@ -173,15 +223,92 @@ const AboutSection = () => {
 
     const diff = touchStartX.current - touchEndX.current;
 
-    // Swipe left (next panel)
     if (diff > 50) {
-      nextPanel();
-    }
-    // Swipe right (prev panel)
-    else if (diff < -50) {
-      prevPanel();
+      // Swipe left - next panel
+      setCurrentPanel((prev) => (prev + 1) % panels.length);
+      resetAutoSwipe();
+    } else if (diff < -50) {
+      // Swipe right - previous panel
+      setCurrentPanel((prev) => (prev - 1 + panels.length) % panels.length);
+      resetAutoSwipe();
     }
   };
+
+  const nextPanel = useCallback(() => {
+    setCurrentPanel((prev) => (prev + 1) % panels.length);
+    handleUserInteraction();
+  }, [handleUserInteraction]);
+
+  const prevPanel = useCallback(() => {
+    setCurrentPanel((prev) => (prev - 1 + panels.length) % panels.length);
+    handleUserInteraction();
+  }, [handleUserInteraction]);
+
+  // Set up Intersection Observer
+  useEffect(() => {
+    const aboutSection = document.getElementById("about");
+    if (!aboutSection) return;
+
+    observer.current = new IntersectionObserver(
+      ([entry]) => {
+        // Check if at least 50% of the element is visible
+        const isVisible = entry.isIntersecting;
+        const intersectionRatio = entry.intersectionRatio;
+
+        // Consider "in view" if more than 50% of the element is visible
+        const shouldBeInView = isVisible && intersectionRatio >= 0.5;
+
+        const wasInView = isInView;
+        setIsInView(shouldBeInView);
+
+        // Start/stop auto-swipe based on visibility
+        if (shouldBeInView && !wasInView) {
+          // Just became sufficiently visible - start auto-swipe if not paused
+          if (!isPaused) {
+            startAutoSwipe();
+          }
+        } else if (!shouldBeInView && wasInView) {
+          // Went below 50% visibility - stop auto-swipe
+          if (autoSwipeTimeout.current) {
+            clearTimeout(autoSwipeTimeout.current);
+          }
+        }
+      },
+      {
+        threshold: [0.5], // Trigger when 50% of element is visible
+        rootMargin: "0px",
+      }
+    );
+
+    if (aboutSection) {
+      observer.current.observe(aboutSection);
+    }
+
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+      if (autoSwipeTimeout.current) {
+        clearTimeout(autoSwipeTimeout.current);
+      }
+    };
+  }, [isPaused, startAutoSwipe, isInView]);
+
+  // Reinitialize auto-swipe when panel changes
+  useEffect(() => {
+    resetAutoSwipe();
+  }, [currentPanel, resetAutoSwipe]);
+
+  // Reinitialize auto-swipe when view state changes
+  useEffect(() => {
+    if (isInView && !isPaused) {
+      startAutoSwipe();
+    } else {
+      if (autoSwipeTimeout.current) {
+        clearTimeout(autoSwipeTimeout.current);
+      }
+    }
+  }, [isInView, isPaused, startAutoSwipe]);
 
   return (
     <section id="about" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
@@ -204,12 +331,16 @@ const AboutSection = () => {
             {panels.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentPanel(index)}
+                onClick={() => {
+                  setCurrentPanel(index);
+                  handleUserInteraction();
+                }}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentPanel
                     ? "bg-blue-600 scale-125"
                     : "bg-slate-300 hover:bg-slate-400"
                 }`}
+                aria-label={`Go to panel ${index + 1}: ${panels[index].title}`}
               />
             ))}
           </div>
@@ -219,11 +350,16 @@ const AboutSection = () => {
             key={currentPanel}
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
+            exit={{ opacity: 0, x: -100 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
             className="bg-white rounded-3xl shadow-xl overflow-hidden lg:max-w-2xl lg:mx-auto"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            style={{
+              minHeight: "400px",
+              transform: "translateZ(0)",
+            }}
           >
             <div
               className={`bg-gradient-to-r ${panels[currentPanel].color} p-6 text-white`}
@@ -241,7 +377,9 @@ const AboutSection = () => {
               </div>
             </div>
 
-            <div className="p-8">{panels[currentPanel].content}</div>
+            <div className="p-8 min-h-[280px]">
+              {panels[currentPanel].content}
+            </div>
           </motion.div>
 
           {/* Navigation Arrows - Desktop (bottom) */}
@@ -249,6 +387,7 @@ const AboutSection = () => {
             <button
               onClick={prevPanel}
               className="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-shadow duration-300"
+              aria-label="Previous panel"
             >
               <ChevronLeft className="w-6 h-6 text-slate-600" />
             </button>
@@ -262,32 +401,37 @@ const AboutSection = () => {
             <button
               onClick={nextPanel}
               className="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-shadow duration-300"
+              aria-label="Next panel"
             >
               <ChevronRight className="w-6 h-6 text-slate-600" />
             </button>
           </div>
 
-          {/* Mobile arrows (side) */}
-          <div className="lg:hidden flex justify-between items-center mt-6">
-            <button
-              onClick={prevPanel}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-shadow duration-300"
-            >
-              <ChevronLeft className="w-6 h-6 text-slate-600" />
-            </button>
+          {/* Mobile arrows (top/bottom) - Better for mobile UX */}
+          <div className="lg:hidden flex justify-between items-center mt-6 relative">
+            <div className="flex justify-between items-center w-full">
+              <button
+                onClick={prevPanel}
+                className="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-shadow duration-300"
+                aria-label="Previous panel"
+              >
+                <ChevronLeft className="w-6 h-6 text-slate-600" />
+              </button>
 
-            <div className="text-center">
-              <p className="text-slate-600">
-                Panel {currentPanel + 1} of {panels.length}
-              </p>
+              <div className="text-center">
+                <p className="text-slate-600 text-sm">
+                  {currentPanel + 1} of {panels.length}
+                </p>
+              </div>
+
+              <button
+                onClick={nextPanel}
+                className="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-shadow duration-300"
+                aria-label="Next panel"
+              >
+                <ChevronRight className="w-6 h-6 text-slate-600" />
+              </button>
             </div>
-
-            <button
-              onClick={nextPanel}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-shadow duration-300"
-            >
-              <ChevronRight className="w-6 h-6 text-slate-600" />
-            </button>
           </div>
         </div>
       </div>

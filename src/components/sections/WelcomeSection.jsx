@@ -209,12 +209,10 @@ const WelcomeSection = ({ scrollToSection }) => {
                         <img
                           src="/images/profile.png"
                           alt="Mouaz Abou Alam"
+                          loading="lazy"
+                          width="128"
+                          height="128"
                           className="w-full h-full object-cover"
-                          onError={(e) => {
-                            // Fallback to User icon if image fails to load
-                            e.target.style.display = "none";
-                            e.target.nextSibling.style.display = "flex";
-                          }}
                         />
                         <User
                           className="w-16 h-16 text-blue-500 sm:w-24 sm:h-24"
