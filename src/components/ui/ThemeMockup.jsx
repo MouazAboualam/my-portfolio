@@ -28,7 +28,7 @@ const ThemeMockup = ({ theme }) => (
         {theme.features.slice(0, 2).map((feature, index) => (
           <span
             key={index}
-            className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded"
+            className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-sm"
           >
             {feature}
           </span>

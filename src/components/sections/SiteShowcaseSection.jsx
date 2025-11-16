@@ -35,7 +35,7 @@ const SiteShowcaseSection = ({ siteShowcases, scrollToSection }) => {
   return (
     <section
       id="showcase"
-      className="py-16 bg-gradient-to-b from-white to-slate-50 overflow-hidden"
+      className="py-16 bg-linear-to-b from-white to-slate-50 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
@@ -47,15 +47,15 @@ const SiteShowcaseSection = ({ siteShowcases, scrollToSection }) => {
           >
             Live Application Showcase
           </motion.h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto rounded-full"></div>
+          <div className="w-24 h-1 bg-linear-to-r from-blue-600 to-cyan-500 mx-auto rounded-full"></div>
           <p className="mt-4 text-xl text-slate-600 max-w-3xl mx-auto">
             Interactive previews of my software applications and systems
           </p>
         </div>
         {/* Horizontal scrolling showcase stream */}
         <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-16 bg-linear-to-r from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-16 bg-linear-to-l from-white to-transparent z-10 pointer-events-none"></div>
           <div className="flex overflow-x-auto scrollbar-hide py-6 space-x-6">
             {siteShowcases.map((site, index) => (
               <motion.div
@@ -65,16 +65,16 @@ const SiteShowcaseSection = ({ siteShowcases, scrollToSection }) => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -10 }}
-                className="flex-shrink-0 w-48 h-72 rounded-2xl overflow-hidden shadow-xl cursor-pointer"
+                className="shrink-0 w-48 h-72 rounded-2xl overflow-hidden shadow-xl cursor-pointer"
                 style={{ backgroundColor: "#1e293b" }}
                 onMouseEnter={() => setHoveredProject(site.id)}
                 onMouseLeave={() => setHoveredProject(null)}
               >
                 <div
-                  className={`h-full bg-gradient-to-b ${site.theme} p-4 flex flex-col`}
+                  className={`h-full bg-linear-to-b ${site.theme} p-4 flex flex-col`}
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <div className="bg-white/20 backdrop-blur-sm rounded-full p-2">
+                    <div className="bg-white/20 backdrop-blur-xs rounded-full p-2">
                       {getIconComponent(site.icon)}
                     </div>
                     <div className="bg-amber-400 text-amber-900 text-xs px-2 py-1 rounded-full font-bold">
@@ -100,7 +100,7 @@ const SiteShowcaseSection = ({ siteShowcases, scrollToSection }) => {
                     </div>
                     <motion.div
                       whileHover={{ scale: 1.1 }}
-                      className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white"
+                      className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white"
                     >
                       <MousePointerClick className="w-4 h-4" />
                     </motion.div>
@@ -111,7 +111,7 @@ const SiteShowcaseSection = ({ siteShowcases, scrollToSection }) => {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent p-4 flex flex-col"
+                    className="absolute inset-0 bg-linear-to-t from-slate-900/90 to-transparent p-4 flex flex-col"
                   >
                     <div className="bg-slate-800/50 rounded-lg p-3 mb-3">
                       <div className="flex items-center space-x-2 text-xs text-blue-300">

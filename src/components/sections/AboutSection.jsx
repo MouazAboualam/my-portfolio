@@ -322,7 +322,7 @@ const AboutSection = () => {
           >
             My Journey & Expertise
           </motion.h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto rounded-full"></div>
+          <div className="w-24 h-1 bg-linear-to-r from-blue-600 to-cyan-500 mx-auto rounded-full"></div>
         </div>
 
         <div className="relative max-w-4xl mx-auto">
@@ -362,7 +362,7 @@ const AboutSection = () => {
             }}
           >
             <div
-              className={`bg-gradient-to-r ${panels[currentPanel].color} p-6 text-white`}
+              className={`bg-linear-to-r ${panels[currentPanel].color} p-6 text-white`}
             >
               <div className="flex items-center space-x-4">
                 <div className="p-2 bg-white bg-opacity-20 rounded-lg">

@@ -8,10 +8,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-2 rounded-lg">
+              <div className="bg-linear-to-r from-blue-600 to-cyan-500 p-2 rounded-lg">
                 <Terminal className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-cyan-300">
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-cyan-300">
                 CodeCraft
               </span>
             </div>

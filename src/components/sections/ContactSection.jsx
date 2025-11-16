@@ -12,7 +12,7 @@ const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-cyan-50"
+      className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-blue-50 to-cyan-50"
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
@@ -24,7 +24,7 @@ const ContactSection = () => {
           >
             Let's Build Your Next Project
           </motion.h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto rounded-full"></div>
+          <div className="w-24 h-1 bg-linear-to-r from-blue-600 to-cyan-500 mx-auto rounded-full"></div>
           <p className="mt-4 text-xl text-slate-600 max-w-3xl mx-auto">
             Ready to build something exceptional? Let's discuss your
             requirements
@@ -106,7 +106,7 @@ const ContactSection = () => {
                   id="name"
                   type="text"
                   placeholder="Your name"
-                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-hidden transition"
                 />
               </div>
               <div>
@@ -120,7 +120,7 @@ const ContactSection = () => {
                   id="email"
                   type="email"
                   placeholder="your@email.com"
-                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-hidden transition"
                 />
               </div>
               <div>
@@ -132,7 +132,7 @@ const ContactSection = () => {
                 </label>
                 <select
                   id="project"
-                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white"
+                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-hidden transition bg-white"
                 >
                   <option>Milestone-Based Development</option>
                   <option>Mobile Application</option>
@@ -152,14 +152,14 @@ const ContactSection = () => {
                   id="message"
                   rows="4"
                   placeholder="Describe your project requirements, timeline, and security concerns..."
-                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-hidden transition"
                 ></textarea>
               </div>
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold py-4 px-6 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                className="w-full bg-linear-to-r from-blue-600 to-cyan-600 text-white font-bold py-4 px-6 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 Request Project Proposal
               </motion.button>

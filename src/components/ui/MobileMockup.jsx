@@ -30,7 +30,7 @@ const MobileMockup = ({ project }) => {
   return (
     <div className="relative group">
       {/* Performance-optimized gradient */}
-      <div className="absolute -inset-4 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500 pointer-events-none"></div>
+      <div className="absolute -inset-4 bg-linear-to-br from-blue-500/20 to-cyan-500/20 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500 pointer-events-none"></div>
 
       <div className="relative bg-slate-900 rounded-[2.5rem] shadow-2xl border border-slate-800 overflow-hidden w-72 mx-auto lg:mx-0">
         {/* Phone header */}
@@ -48,7 +48,7 @@ const MobileMockup = ({ project }) => {
         {/* Phone screen with loading states */}
         <div className="bg-slate-100 h-[560px] overflow-hidden relative">
           {!iframeLoaded && !hasError && (
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-200 to-slate-300 flex items-center justify-center z-10">
+            <div className="absolute inset-0 bg-linear-to-b from-slate-200 to-slate-300 flex items-center justify-center z-10">
               <div className="flex flex-col items-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-600 mb-2"></div>
                 <span className="text-slate-500 text-xs">Loading demo...</span>

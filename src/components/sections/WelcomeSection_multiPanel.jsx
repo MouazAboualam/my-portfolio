@@ -202,7 +202,7 @@ const WelcomeSection = ({ scrollToSection }) => {
           transition={{ duration: 0.8, ease: "easeInOut" }}
         >
           {/* Panel 1: Professional Introduction */}
-          <div className="min-w-full h-full flex items-center bg-gradient-to-b from-slate-50 to-slate-100 px-4 sm:px-6 lg:px-8">
+          <div className="min-w-full h-full flex items-center bg-linear-to-b from-slate-50 to-slate-100 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto w-full">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <motion.div
@@ -231,7 +231,7 @@ const WelcomeSection = ({ scrollToSection }) => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => scrollToSection("contact")}
-                      className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="bg-linear-to-r from-blue-600 to-cyan-500 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       Start Your Project
                     </motion.button>
@@ -269,8 +269,8 @@ const WelcomeSection = ({ scrollToSection }) => {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="relative"
                 >
-                  <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-3xl p-1 shadow-2xl">
-                    <div className="bg-white rounded-[2rem] overflow-hidden shadow-xl">
+                  <div className="bg-linear-to-br from-blue-500 to-cyan-600 rounded-3xl p-1 shadow-2xl">
+                    <div className="bg-white rounded-4xl overflow-hidden shadow-xl">
                       <div className="p-6 space-y-4">
                         <div className="flex justify-between items-start">
                           <div className="space-y-1">
@@ -423,7 +423,7 @@ const WelcomeSection = ({ scrollToSection }) => {
                     className="absolute -bottom-6 -right-6 bg-amber-100 border-2 border-amber-300 rounded-2xl p-3 shadow-lg max-w-xs"
                   >
                     <div className="flex items-start space-x-2">
-                      <ShieldCheck className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                      <ShieldCheck className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
                       <p className="text-sm text-amber-800">
                         Security testing and compliance checks at every
                         milestone
@@ -436,7 +436,7 @@ const WelcomeSection = ({ scrollToSection }) => {
           </div>
 
           {/* Panel 2: Personal Introduction */}
-          <div className="min-w-full h-full bg-gradient-to-br from-indigo-50 to-purple-50 px-4 sm:px-6 lg:px-8 flex items-center">
+          <div className="min-w-full h-full bg-linear-to-br from-indigo-50 to-purple-50 px-4 sm:px-6 lg:px-8 flex items-center">
             <div className="max-w-7xl mx-auto w-full">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <motion.div
@@ -452,8 +452,8 @@ const WelcomeSection = ({ scrollToSection }) => {
                       transition={{ delay: 0.3 }}
                       className="relative inline-block"
                     >
-                      <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full opacity-20 blur-xl"></div>
-                      <div className="relative bg-gradient-to-br from-blue-600 to-cyan-600 p-1 rounded-full">
+                      <div className="absolute -inset-4 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full opacity-20 blur-xl"></div>
+                      <div className="relative bg-linear-to-br from-blue-600 to-cyan-600 p-1 rounded-full">
                         <div className="bg-white rounded-full p-1">
                           <div className="w-48 h-48 bg-slate-200 rounded-full flex items-center justify-center overflow-hidden border-4 border-white shadow-lg">
                             <User className="w-24 h-24 text-blue-500" />
@@ -461,7 +461,7 @@ const WelcomeSection = ({ scrollToSection }) => {
                         </div>
                       </div>
                     </motion.div>
-                    <h2 className="text-3xl md:text-4xl font-bold mt-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-cyan-600">
+                    <h2 className="text-3xl md:text-4xl font-bold mt-6 bg-clip-text text-transparent bg-linear-to-r from-blue-700 to-cyan-600">
                       Alex Morgan
                     </h2>
                     <p className="text-xl text-slate-600 mt-2">
@@ -549,8 +549,8 @@ const WelcomeSection = ({ scrollToSection }) => {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="relative"
                 >
-                  <div className="bg-gradient-to-br from-purple-500 to-fuchsia-600 rounded-3xl p-1 shadow-2xl">
-                    <div className="bg-white rounded-[2rem] overflow-hidden shadow-xl">
+                  <div className="bg-linear-to-br from-purple-500 to-fuchsia-600 rounded-3xl p-1 shadow-2xl">
+                    <div className="bg-white rounded-4xl overflow-hidden shadow-xl">
                       <div className="p-6 space-y-4">
                         <div className="flex justify-between items-start">
                           <div className="space-y-1">
@@ -718,7 +718,7 @@ const WelcomeSection = ({ scrollToSection }) => {
             className={`w-12 h-12 rounded-full flex items-center justify-center ${
               activePanel === 0
                 ? "bg-slate-300 cursor-not-allowed"
-                : "bg-white/80 backdrop-blur-sm shadow-lg hover:bg-blue-500 hover:text-white"
+                : "bg-white/80 backdrop-blur-xs shadow-lg hover:bg-blue-500 hover:text-white"
             } transition-all duration-300`}
           >
             <ChevronLeft className="w-6 h-6" />
@@ -743,7 +743,7 @@ const WelcomeSection = ({ scrollToSection }) => {
             className={`w-12 h-12 rounded-full flex items-center justify-center ${
               activePanel === 1
                 ? "bg-slate-300 cursor-not-allowed"
-                : "bg-white/80 backdrop-blur-sm shadow-lg hover:bg-blue-500 hover:text-white"
+                : "bg-white/80 backdrop-blur-xs shadow-lg hover:bg-blue-500 hover:text-white"
             } transition-all duration-300`}
           >
             <ChevronRight className="w-6 h-6" />

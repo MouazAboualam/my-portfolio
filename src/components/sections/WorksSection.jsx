@@ -80,7 +80,7 @@ const WorksSection = ({ projects, scrollToSection }) => {
           >
             Featured Software Projects
           </motion.h2>
-          <div className="w-16 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto rounded-full"></div>
+          <div className="w-16 h-1 bg-linear-to-r from-blue-600 to-cyan-500 mx-auto rounded-full"></div>
           <p className="mt-3 text-base md:text-lg text-slate-600 max-w-2xl mx-auto">
             Backend-focused applications built with security and scalability in
             mind
@@ -97,7 +97,7 @@ const WorksSection = ({ projects, scrollToSection }) => {
                 onClick={() => setActiveMilestone(milestone.id)}
                 className={`flex items-center px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   activeMilestone === milestone.id
-                    ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md"
+                    ? "bg-linear-to-r from-blue-600 to-cyan-600 text-white shadow-md"
                     : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                 }`}
               >
@@ -141,7 +141,7 @@ const WorksSection = ({ projects, scrollToSection }) => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-1 mb-10 shadow-md"
+            className="bg-linear-to-br from-indigo-50 to-purple-50 rounded-2xl p-1 mb-10 shadow-md"
           >
             <div className="bg-white rounded-xl overflow-hidden">
               <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -208,7 +208,7 @@ const WorksSection = ({ projects, scrollToSection }) => {
                           key={index}
                           className="flex items-start text-slate-700 text-xs"
                         >
-                          <CheckCircle className="w-4 h-4 text-green-500 mr-1 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="w-4 h-4 text-green-500 mr-1 mt-0.5 shrink-0" />
                           <span>{feature}</span>
                         </li>
                       ))}
@@ -240,7 +240,7 @@ const WorksSection = ({ projects, scrollToSection }) => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className={`bg-slate-50 rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 mb-6 ${
+            className={`bg-slate-50 rounded-xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-md transition-all duration-300 mb-6 ${
               viewMode === "list" ? "flex" : ""
             }`}
           >
@@ -248,9 +248,9 @@ const WorksSection = ({ projects, scrollToSection }) => {
               <div className="flex">
                 <div className="w-1/3 bg-slate-200 flex items-center justify-center p-4">
                   <div
-                    className={`w-full h-full bg-gradient-to-br ${firstProject.theme} rounded-lg shadow-md flex flex-col items-center justify-center p-4 text-white`}
+                    className={`w-full h-full bg-linear-to-br ${firstProject.theme} rounded-lg shadow-md flex flex-col items-center justify-center p-4 text-white`}
                   >
-                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-2">
+                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-2">
                       {firstProject.milestone === "products" && (
                         <Smartphone className="w-5 h-5 text-white" />
                       )}
@@ -346,7 +346,7 @@ const WorksSection = ({ projects, scrollToSection }) => {
                             key={featureIndex}
                             className="flex items-start text-slate-700 text-xs"
                           >
-                            <ChevronRight className="w-3 h-3 text-blue-500 mt-0.5 flex-shrink-0" />
+                            <ChevronRight className="w-3 h-3 text-blue-500 mt-0.5 shrink-0" />
                             <span>{feature}</span>
                           </li>
                         ))}
@@ -355,9 +355,9 @@ const WorksSection = ({ projects, scrollToSection }) => {
                 </div>
                 <div className="bg-slate-200 flex items-center justify-center p-3">
                   <div
-                    className={`w-full h-32 bg-gradient-to-br ${firstProject.theme} rounded-lg shadow-md flex flex-col items-center justify-center p-3 text-white`}
+                    className={`w-full h-32 bg-linear-to-br ${firstProject.theme} rounded-lg shadow-md flex flex-col items-center justify-center p-3 text-white`}
                   >
-                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-2">
+                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-2">
                       {firstProject.milestone === "products" && (
                         <Smartphone className="w-5 h-5 text-white" />
                       )}
@@ -417,7 +417,7 @@ const WorksSection = ({ projects, scrollToSection }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className={`bg-slate-50 rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 ${
+                className={`bg-slate-50 rounded-xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-md transition-all duration-300 ${
                   viewMode === "list" ? "flex" : ""
                 }`}
               >
@@ -425,9 +425,9 @@ const WorksSection = ({ projects, scrollToSection }) => {
                   <div className="flex">
                     <div className="w-1/3 bg-slate-200 flex items-center justify-center p-4">
                       <div
-                        className={`w-full h-full bg-gradient-to-br ${project.theme} rounded-lg shadow-md flex flex-col items-center justify-center p-4 text-white`}
+                        className={`w-full h-full bg-linear-to-br ${project.theme} rounded-lg shadow-md flex flex-col items-center justify-center p-4 text-white`}
                       >
-                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-2">
+                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-2">
                           {project.milestone === "products" && (
                             <Smartphone className="w-5 h-5 text-white" />
                           )}
@@ -523,7 +523,7 @@ const WorksSection = ({ projects, scrollToSection }) => {
                                 key={featureIndex}
                                 className="flex items-start text-slate-700 text-xs"
                               >
-                                <ChevronRight className="w-3 h-3 text-blue-500 mt-0.5 flex-shrink-0" />
+                                <ChevronRight className="w-3 h-3 text-blue-500 mt-0.5 shrink-0" />
                                 <span>{feature}</span>
                               </li>
                             ))}
@@ -532,9 +532,9 @@ const WorksSection = ({ projects, scrollToSection }) => {
                     </div>
                     <div className="bg-slate-200 flex items-center justify-center p-3">
                       <div
-                        className={`w-full h-32 bg-gradient-to-br ${project.theme} rounded-lg shadow-md flex flex-col items-center justify-center p-3 text-white`}
+                        className={`w-full h-32 bg-linear-to-br ${project.theme} rounded-lg shadow-md flex flex-col items-center justify-center p-3 text-white`}
                       >
-                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-2">
+                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center mb-2">
                           {project.milestone === "products" && (
                             <Smartphone className="w-5 h-5 text-white" />
                           )}

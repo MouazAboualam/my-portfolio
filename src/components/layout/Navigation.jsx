@@ -17,7 +17,7 @@ const Navigation = ({
   if (!mounted) return null;
 
   return (
-    <nav className="fixed w-full bg-white/80 backdrop-blur-sm z-50 shadow-sm">
+    <nav className="fixed w-full bg-white/80 backdrop-blur-xs z-50 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <motion.div
@@ -25,10 +25,10 @@ const Navigation = ({
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center space-x-2"
           >
-            <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-2 rounded-lg">
+            <div className="bg-linear-to-r from-blue-600 to-cyan-500 p-2 rounded-lg">
               <Terminal className="w-6 h-6 text-white" />
             </div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-cyan-600">
+            <span className="text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-700 to-cyan-600">
               CodeCraft
             </span>
           </motion.div>
@@ -56,7 +56,7 @@ const Navigation = ({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-5 py-2 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-linear-to-r from-blue-600 to-cyan-500 text-white px-5 py-2 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Start Project
             </motion.button>
@@ -103,7 +103,7 @@ const Navigation = ({
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-4 py-3 rounded-lg font-medium mt-2"
+              className="bg-linear-to-r from-blue-600 to-cyan-500 text-white px-4 py-3 rounded-lg font-medium mt-2"
             >
               Start Project
             </motion.button>

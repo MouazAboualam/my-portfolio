@@ -99,7 +99,7 @@ const App = () => {
 
   // Loading fallback component
   const LoadingFallback = () => (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-b from-slate-50 to-slate-100 flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
         <p className="mt-4 text-slate-600">Loading portfolio...</p>
@@ -108,7 +108,7 @@ const App = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 text-slate-900 font-sans">
+    <div className="min-h-screen bg-linear-to-b from-slate-50 to-slate-100 text-slate-900 font-sans">
       <Suspense fallback={<LoadingFallback />}>
         <Navigation
           activeSection={activeSection}

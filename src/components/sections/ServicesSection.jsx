@@ -105,7 +105,7 @@ const ServicesSection = ({ services }) => {
   return (
     <section
       id="services"
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden"
+      className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-slate-50 to-white relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
@@ -117,7 +117,7 @@ const ServicesSection = ({ services }) => {
           >
             Professional Development Services
           </motion.h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-cyan-500 mx-auto rounded-full"></div>
+          <div className="w-24 h-1 bg-linear-to-r from-blue-600 to-cyan-500 mx-auto rounded-full"></div>
           <p className="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
             Specialized solutions for your development needs
           </p>
@@ -128,12 +128,12 @@ const ServicesSection = ({ services }) => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: isAtEdges.left ? 0.2 : 1 }}
-            className="w-16 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"
+            className="w-16 h-1 bg-linear-to-r from-blue-500 to-cyan-500 rounded-full"
           ></motion.div>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: isAtEdges.right ? 0.2 : 1 }}
-            className="w-16 h-1 bg-gradient-to-l from-blue-500 to-cyan-500 rounded-full"
+            className="w-16 h-1 bg-linear-to-l from-blue-500 to-cyan-500 rounded-full"
           ></motion.div>
         </div>
 
@@ -156,7 +156,7 @@ const ServicesSection = ({ services }) => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.08 }}
                 whileHover={{ y: -6 }}
-                className="snap-start flex-shrink-0 w-44 md:w-48 bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 overflow-hidden"
+                className="snap-start shrink-0 w-44 md:w-48 bg-white rounded-xl shadow-xs border border-slate-100 hover:shadow-md transition-all duration-300 overflow-hidden"
               >
                 <div className="p-4 h-56 flex flex-col">
                   <div className="mb-3 p-2 bg-slate-50 rounded-lg w-fit">
@@ -167,7 +167,7 @@ const ServicesSection = ({ services }) => {
                   <h3 className="text-lg font-bold text-slate-800 mb-2">
                     {service.title}
                   </h3>
-                  <p className="text-slate-600 text-sm leading-relaxed flex-grow">
+                  <p className="text-slate-600 text-sm leading-relaxed grow">
                     {service.description}
                   </p>
                 </div>

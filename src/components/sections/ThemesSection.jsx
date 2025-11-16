@@ -123,7 +123,7 @@ const ThemesSection = ({ themes }) => {
   return (
     <section
       id="themes"
-      className="py-24 bg-gradient-to-b from-white to-slate-50"
+      className="py-24 bg-linear-to-b from-white to-slate-50"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
@@ -131,7 +131,7 @@ const ThemesSection = ({ themes }) => {
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-block bg-gradient-to-r from-pink-50 to-rose-50 text-pink-700 px-4 py-1.5 rounded-full text-sm font-medium mb-4"
+            className="inline-block bg-linear-to-r from-pink-50 to-rose-50 text-pink-700 px-4 py-1.5 rounded-full text-sm font-medium mb-4"
           >
             <ShoppingBag className="w-4 h-4 inline mr-1" />
             Premium Website Themes
@@ -144,7 +144,7 @@ const ThemesSection = ({ themes }) => {
           >
             Ready-to-Use Website Themes
           </motion.h2>
-          <div className="w-32 h-1.5 bg-gradient-to-r from-pink-500 to-purple-600 mx-auto rounded-full mb-6"></div>
+          <div className="w-32 h-1.5 bg-linear-to-r from-pink-500 to-purple-600 mx-auto rounded-full mb-6"></div>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -188,7 +188,7 @@ const ThemesSection = ({ themes }) => {
                     }}
                     className={`w-full text-left px-5 py-3 flex items-center transition-colors duration-200 ${
                       activeTheme === filter.id
-                        ? `bg-gradient-to-r ${filter.colors} text-white`
+                        ? `bg-linear-to-r ${filter.colors} text-white`
                         : "text-slate-700 hover:bg-slate-50"
                     }`}
                   >
@@ -214,7 +214,7 @@ const ThemesSection = ({ themes }) => {
               onClick={() => setActiveTheme(filter.id)}
               className={`flex flex-col items-center px-5 py-3 rounded-xl font-medium transition-all duration-300 ${
                 activeTheme === filter.id
-                  ? `bg-gradient-to-r ${filter.colors} text-white shadow-lg`
+                  ? `bg-linear-to-r ${filter.colors} text-white shadow-lg`
                   : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50"
               }`}
             >
@@ -229,8 +229,8 @@ const ThemesSection = ({ themes }) => {
         {/* Horizontal scrolling theme showcase */}
         <div className="relative mb-12">
           {/* Gradient overlays for scroll indication */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
           {/* Scrollable container with drag functionality */}
           <div
@@ -254,7 +254,7 @@ const ThemesSection = ({ themes }) => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -8 }}
-                className="flex-shrink-0 w-80"
+                className="shrink-0 w-80"
               >
                 <ThemeMockup theme={theme} />
               </motion.div>
@@ -368,7 +368,7 @@ const ThemesSection = ({ themes }) => {
         </div>
 
         {/* CTA Section */}
-        <div className="text-center max-w-4xl mx-auto bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-8 shadow-lg border border-pink-100">
+        <div className="text-center max-w-4xl mx-auto bg-linear-to-r from-pink-50 to-purple-50 rounded-2xl p-8 shadow-lg border border-pink-100">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -400,7 +400,7 @@ const ThemesSection = ({ themes }) => {
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-xl text-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
+            className="inline-flex items-center px-8 py-4 bg-linear-to-r from-pink-500 to-purple-600 text-white font-bold rounded-xl text-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
           >
             <ShoppingBag className="w-5 h-5 mr-2" />
             <span>Browse All Themes</span>
