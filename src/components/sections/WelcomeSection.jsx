@@ -526,15 +526,21 @@ const WelcomeSection = ({ scrollToSection }) => {
                       </div>
 
                       <div className="bg-slate-900 rounded-xl p-4 overflow-x-auto font-mono text-sm">
-                        <pre className="whitespace-pre">
-                          {renderHighlightedCode()}
-                          {showCursor && (
-                            <span className="text-green-400 animate-pulse">
-                              |
-                            </span>
-                          )}
-                        </pre>
-                      </div>
+  <pre 
+    className="whitespace-pre"
+    style={{
+      minHeight: '200px', // ← Fixed height
+      maxHeight: '200px',
+      overflowY: 'auto',
+      wordBreak: 'break-all'
+    }}
+  >
+    {renderHighlightedCode()}
+    {showCursor && (
+      <span className="text-green-400 animate-pulse">|</span>
+    )}
+  </pre>
+</div>
 
                       <div className="space-y-4">
                         <div>
